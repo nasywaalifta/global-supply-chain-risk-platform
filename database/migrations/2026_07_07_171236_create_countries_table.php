@@ -21,7 +21,7 @@ return new class extends Migration
 
         $table->string('cca2',10)->nullable();
 
-        $table->string('cca3',10)->nullable();
+        $table->string('cca3',10)->unique();
 
         $table->string('capital')->nullable();
 
