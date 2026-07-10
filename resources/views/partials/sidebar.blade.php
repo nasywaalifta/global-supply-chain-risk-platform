@@ -51,8 +51,8 @@
 
             <li class="nav-item">
 
-                <a class="nav-link py-3 px-4 text-white"
-                   href="#">
+                <a class="nav-link text-white py-3 px-4 {{ request()->routeIs('weather.*') ? 'active bg-warning text-dark' : '' }}"
+                    href="{{ route('weather.index') }}">
 
                     <i class="fas fa-cloud-sun me-2 text-warning"></i>
 

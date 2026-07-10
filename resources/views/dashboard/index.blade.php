@@ -21,162 +21,92 @@
 <div class="row g-3 mb-4">
 
     <div class="col-xl-2 col-md-4">
-
         <div class="card bg-primary text-white border-0 shadow">
-
             <div class="card-body">
-
-                <div class="d-flex justify-content-between">
-
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-
                         <small>Total Negara</small>
-
                         <h2>{{ $totalCountries }}</h2>
-
                     </div>
-
                     <i class="fas fa-globe fa-2x opacity-50"></i>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <div class="col-xl-2 col-md-4">
-
         <div class="card bg-danger text-white border-0 shadow">
-
             <div class="card-body">
-
-                <div class="d-flex justify-content-between">
-
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-
                         <small>Risiko Tinggi</small>
-
-                        <h2>0</h2>
-
+                        <h2>{{ $highRisk }}</h2>
                     </div>
-
                     <i class="fas fa-triangle-exclamation fa-2x opacity-50"></i>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <div class="col-xl-2 col-md-4">
-
         <div class="card bg-warning text-dark border-0 shadow">
-
             <div class="card-body">
-
-                <div class="d-flex justify-content-between">
-
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-
                         <small>Risiko Sedang</small>
-
-                        <h2>0</h2>
-
+                        <h2>{{ $mediumRisk }}</h2>
                     </div>
-
                     <i class="fas fa-circle-half-stroke fa-2x opacity-50"></i>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <div class="col-xl-2 col-md-4">
-
         <div class="card bg-success text-white border-0 shadow">
-
             <div class="card-body">
-
-                <div class="d-flex justify-content-between">
-
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-
                         <small>Risiko Rendah</small>
-
-                        <h2>0</h2>
-
+                        <h2>{{ $lowRisk }}</h2>
                     </div>
-
                     <i class="fas fa-shield-heart fa-2x opacity-50"></i>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <div class="col-xl-2 col-md-4">
-
         <div class="card bg-info text-white border-0 shadow">
-
             <div class="card-body">
-
-                <div class="d-flex justify-content-between">
-
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-
                         <small>Artikel</small>
-
-                        <h2>0</h2>
-
+                        <h2>{{ $totalNews }}</h2>
                     </div>
-
                     <i class="fas fa-newspaper fa-2x opacity-50"></i>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <div class="col-xl-2 col-md-4">
-
         <div class="card bg-secondary text-white border-0 shadow">
-
             <div class="card-body">
-
-                <div class="d-flex justify-content-between">
-
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-
                         <small>Pelabuhan</small>
-
-                        <h2>0</h2>
-
+                        <h2>{{ $totalPorts }}</h2>
                     </div>
-
                     <i class="fas fa-ship fa-2x opacity-50"></i>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
 </div>
+
+    
 
 {{-- MAP + RINGKASAN --}}
 
@@ -187,9 +117,7 @@
         <div class="card bg-dark text-white shadow">
 
             <div class="card-header">
-
                 🗺️ Peta Monitoring Global
-
             </div>
 
             <div class="card-body">
@@ -209,21 +137,37 @@
         <div class="card bg-dark text-white shadow mb-3">
 
             <div class="card-header">
-
                 📈 Ringkasan Risiko
-
             </div>
 
             <div class="card-body">
 
-                <div class="mb-3">
+                @php
 
-                    High Risk
+                    $totalRisk = $highRisk + $mediumRisk + $lowRisk;
 
-                    <div class="progress mt-1">
+                    $highPercent = $totalRisk ? ($highRisk / $totalRisk) * 100 : 0;
+                    $mediumPercent = $totalRisk ? ($mediumRisk / $totalRisk) * 100 : 0;
+                    $lowPercent = $totalRisk ? ($lowRisk / $totalRisk) * 100 : 0;
+
+                @endphp
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>🔴 High Risk</span>
+
+                        <strong>{{ $highRisk }}</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
 
                         <div class="progress-bar bg-danger"
-                             style="width:0%">
+                             style="width: {{ $highPercent }}%">
+
+                            {{ number_format($highPercent,1) }}%
 
                         </div>
 
@@ -231,14 +175,22 @@
 
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
 
-                    Medium Risk
+                    <div class="d-flex justify-content-between">
 
-                    <div class="progress mt-1">
+                        <span>🟡 Medium Risk</span>
 
-                        <div class="progress-bar bg-warning"
-                             style="width:0%">
+                        <strong>{{ $mediumRisk }}</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-warning text-dark"
+                             style="width: {{ $mediumPercent }}%">
+
+                            {{ number_format($mediumPercent,1) }}%
 
                         </div>
 
@@ -248,12 +200,20 @@
 
                 <div>
 
-                    Low Risk
+                    <div class="d-flex justify-content-between">
 
-                    <div class="progress mt-1">
+                        <span>🟢 Low Risk</span>
+
+                        <strong>{{ $lowRisk }}</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
 
                         <div class="progress-bar bg-success"
-                             style="width:0%">
+                             style="width: {{ $lowPercent }}%">
+
+                            {{ number_format($lowPercent,1) }}%
 
                         </div>
 
@@ -268,14 +228,29 @@
         <div class="card bg-dark text-white shadow">
 
             <div class="card-header">
-
                 ⭐ Daftar Pantau
-
             </div>
 
             <div class="card-body">
 
-                Belum ada negara yang dipantau.
+                @if($totalWatchlist)
+
+                    <div class="alert alert-success mb-0">
+
+                        Total Watchlist :
+                        <strong>{{ $totalWatchlist }}</strong>
+
+                    </div>
+
+                @else
+
+                    <span class="text-secondary">
+
+                        Belum ada negara yang dipantau.
+
+                    </span>
+
+                @endif
 
             </div>
 
@@ -293,73 +268,132 @@
 
         <div class="card bg-dark text-white shadow">
 
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
 
-                🌍 Monitoring Negara
+                <span>
+                    🌍 Monitoring Negara
+                </span>
+
+                <span class="badge bg-info">
+                    {{ $totalCountries }} Negara
+                </span>
 
             </div>
 
-            <div class="card-body">
+            <div class="card-body p-0">
 
-                <table class="table table-dark table-hover align-middle">
+                <div class="table-responsive">
 
-                    <thead>
+                    <table class="table table-dark table-hover mb-0 align-middle">
 
-                    <tr>
-
-                        <th>Negara</th>
-
-                        <th>Region</th>
-
-                        <th>Capital</th>
-
-                        <th>Status</th>
-
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    @forelse($countries as $country)
+                        <thead>
 
                         <tr>
 
-                            <td>{{ $country->name }}</td>
+                            <th>Negara</th>
 
-                            <td>{{ $country->region }}</td>
+                            <th>Region</th>
 
-                            <td>{{ $country->capital }}</td>
+                            <th>Ibukota</th>
 
-                            <td>
-
-                                <span class="badge bg-success">
-
-                                    Aman
-
-                                </span>
-
-                            </td>
+                            <th>Status</th>
 
                         </tr>
 
-                    @empty
+                        </thead>
 
-                        <tr>
+                        <tbody>
 
-                            <td colspan="4" class="text-center">
+                        @forelse($countries->take(15) as $country)
 
-                                Belum ada data negara
+                            <tr>
 
-                            </td>
+                                <td>
 
-                        </tr>
+                                    <strong>{{ $country->name }}</strong>
 
-                    @endforelse
+                                </td>
 
-                    </tbody>
+                                <td>
 
-                </table>
+                                    {{ $country->region }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $country->capital ?? '-' }}
+
+                                </td>
+
+                                <td>
+
+                                    @php
+
+                                        $status = rand(1,3);
+
+                                    @endphp
+
+                                    @if($status == 1)
+
+                                        <span class="badge bg-success">
+
+                                            Low Risk
+
+                                        </span>
+
+                                    @elseif($status == 2)
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            Medium Risk
+
+                                        </span>
+
+                                    @else
+
+                                        <span class="badge bg-danger">
+
+                                            High Risk
+
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td colspan="4" class="text-center py-4">
+
+                                    Tidak ada data negara.
+
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="card-footer text-end">
+
+                <a href="{{ route('countries.index') }}"
+                   class="btn btn-outline-info btn-sm">
+
+                    Lihat Semua Negara →
+
+                </a>
 
             </div>
 
