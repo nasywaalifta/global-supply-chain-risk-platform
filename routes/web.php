@@ -8,6 +8,7 @@ use App\Http\Controllers\PortController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ExchangeRateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +78,15 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Exchange Rates
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/exchange-rates', [ExchangeRateController::class, 'index'])
+        ->name('exchange-rates.index');
+
+    /*
+    |--------------------------------------------------------------------------
     | Profile
     |--------------------------------------------------------------------------
     */
@@ -89,7 +99,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
-
 });
 
 /*

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\Port;
 use Illuminate\Http\Request;
 
 class CountryController extends Controller
@@ -12,17 +13,13 @@ class CountryController extends Controller
         $search = $request->search;
 
         $countries = Country::query()
-
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
                       ->orWhere('cca3', 'like', "%{$search}%")
                       ->orWhere('region', 'like', "%{$search}%");
             })
-
             ->orderBy('name')
-
             ->paginate(15)
-
             ->withQueryString();
 
         return view('countries.index', compact('countries', 'search'));
@@ -30,6 +27,12 @@ class CountryController extends Controller
 
     public function show(Country $country)
     {
-        return view('countries.show', compact('country'));
+        // Hitung jumlah pelabuhan pada negara ini
+        $totalPorts = Port::where('country_id', $country->id)->count();
+
+        return view('countries.show', compact(
+            'country',
+            'totalPorts'
+        ));
     }
 }
