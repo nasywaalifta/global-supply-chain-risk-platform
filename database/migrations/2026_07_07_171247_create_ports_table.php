@@ -10,31 +10,40 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('ports', function (Blueprint $table) {
+    {
+        Schema::create('ports', function (Blueprint $table) {
 
-        $table->id();
+            $table->id();
 
-        $table->foreignId('country_id')
-              ->constrained()
-              ->cascadeOnDelete();
+            $table->foreignId('country_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-        $table->string('name');
+            // UN/LOCODE (contoh: IDTPP, SGSIN, CNSHA)
+            $table->string('code')->nullable();
 
-        $table->string('city')->nullable();
+            // Nama pelabuhan
+            $table->string('name');
 
-        $table->decimal('latitude', 10, 6)->nullable();
+            // Kota
+            $table->string('city')->nullable();
 
-        $table->decimal('longitude', 10, 6)->nullable();
+            // Koordinat
+            $table->decimal('latitude', 10, 6)->nullable();
+            $table->decimal('longitude', 10, 6)->nullable();
 
-        $table->string('type')->nullable();
+            // Jenis lokasi (Sea Port, River Port, dll)
+            $table->string('type')->nullable();
 
-        $table->integer('risk_score')->default(0);
+            // Status dari dataset UN/LOCODE
+            $table->string('status')->nullable();
 
-        $table->timestamps();
+            // Risk Score
+            $table->integer('risk_score')->default(0);
 
-    });
-}
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

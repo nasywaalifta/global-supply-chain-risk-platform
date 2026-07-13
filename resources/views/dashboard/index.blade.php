@@ -11,7 +11,7 @@
 
     <span class="badge bg-success fs-6">
         <i class="fas fa-circle me-1"></i>
-        System Online
+        Sistem Aktif
     </span>
 
 </div>
@@ -81,7 +81,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <small>Artikel</small>
+                        <small>Berita</small>
                         <h2>{{ $totalNews }}</h2>
                     </div>
                     <i class="fas fa-newspaper fa-2x opacity-50"></i>
@@ -156,7 +156,7 @@
 
                     <div class="d-flex justify-content-between">
 
-                        <span>🔴 High Risk</span>
+                        <span>🔴 Risiko Tinggi</span>
 
                         <strong>{{ $highRisk }}</strong>
 
@@ -179,7 +179,7 @@
 
                     <div class="d-flex justify-content-between">
 
-                        <span>🟡 Medium Risk</span>
+                        <span>🟡 Risiko Sedang</span>
 
                         <strong>{{ $mediumRisk }}</strong>
 
@@ -202,7 +202,7 @@
 
                     <div class="d-flex justify-content-between">
 
-                        <span>🟢 Low Risk</span>
+                        <span>🟢 Risiko Rendah</span>
 
                         <strong>{{ $lowRisk }}</strong>
 
@@ -237,7 +237,7 @@
 
                     <div class="alert alert-success mb-0">
 
-                        Total Watchlist :
+                        Total Daftar Pantau :
                         <strong>{{ $totalWatchlist }}</strong>
 
                     </div>
@@ -275,7 +275,7 @@
                 </span>
 
                 <span class="badge bg-info">
-                    {{ $totalCountries }} Negara
+                    {{ $totalCountries }} Data Negara
                 </span>
 
             </div>
@@ -328,37 +328,9 @@
 
                                 <td>
 
-                                    @php
-
-                                        $status = rand(1,3);
-
-                                    @endphp
-
-                                    @if($status == 1)
-
-                                        <span class="badge bg-success">
-
-                                            Low Risk
-
-                                        </span>
-
-                                    @elseif($status == 2)
-
-                                        <span class="badge bg-warning text-dark">
-
-                                            Medium Risk
-
-                                        </span>
-
-                                    @else
-
-                                        <span class="badge bg-danger">
-
-                                            High Risk
-
-                                        </span>
-
-                                    @endif
+                                    <span class="badge bg-secondary">
+                                        Belum Dinilai
+                                    </span>
 
                                 </td>
 
@@ -391,7 +363,7 @@
                 <a href="{{ route('countries.index') }}"
                    class="btn btn-outline-info btn-sm">
 
-                    Lihat Semua Negara →
+                    Lihat Seluruh Negara →
 
                 </a>
 
@@ -407,7 +379,7 @@
 
             <div class="card-header">
 
-                ⚡ Akses Cepat
+                ⚡ Menu Cepat
 
             </div>
 

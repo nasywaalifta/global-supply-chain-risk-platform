@@ -18,7 +18,7 @@
     <div class="mt-4">
 
         <small class="text-secondary px-4">
-            DASHBOARD
+            MENU UTAMA
         </small>
 
         <ul class="nav flex-column mt-2">
@@ -51,8 +51,8 @@
 
             <li class="nav-item">
 
-                <a class="nav-link text-white py-3 px-4 {{ request()->routeIs('weather.*') ? 'active bg-warning text-dark' : '' }}"
-                    href="{{ route('weather.index') }}">
+                <a class="nav-link py-3 px-4 {{ request()->routeIs('weather.*') ? 'active bg-warning text-dark rounded' : 'text-white' }}"
+                   href="{{ route('weather.index') }}">
 
                     <i class="fas fa-cloud-sun me-2 text-warning"></i>
 
@@ -65,13 +65,11 @@
             <li class="nav-item">
 
                 <a class="nav-link py-3 px-4 {{ request()->is('ports*') ? 'active bg-primary text-white rounded' : 'text-white' }}"
-                    href="{{ route('ports.index') }}">
+                   href="{{ route('ports.index') }}">
 
                     <i class="fas fa-ship me-2 text-primary"></i>
 
                     Pelabuhan
-
-</a>
 
                 </a>
 
@@ -82,7 +80,7 @@
         <hr class="border-secondary">
 
         <small class="text-secondary px-4">
-            ANALISIS
+            ANALISIS DATA
         </small>
 
         <ul class="nav flex-column mt-2">
@@ -94,7 +92,7 @@
 
                     <i class="fas fa-chart-pie me-2 text-danger"></i>
 
-                    Risk Score
+                    Skor Risiko
 
                 </a>
 
@@ -120,7 +118,7 @@
 
                     <i class="fas fa-star me-2 text-warning"></i>
 
-                    Watchlist
+                    Daftar Pantau
 
                 </a>
 
@@ -133,9 +131,7 @@
     <div class="mt-auto p-4 border-top border-secondary">
 
         <small class="text-secondary">
-
-            Version 1.0
-
+            Versi 1.0
         </small>
 
     </div>

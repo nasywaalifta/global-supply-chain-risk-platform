@@ -16,7 +16,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
 
         <span>
-            🌍 Data Negara
+            🌍 Data Negara Dunia
         </span>
 
         <form action="{{ route('countries.index') }}" method="GET">
@@ -27,7 +27,7 @@
                     type="text"
                     name="search"
                     class="form-control"
-                    placeholder="Cari negara..."
+                    placeholder="Cari nama negara..."
                     value="{{ $search }}">
 
                 <button class="btn btn-info">
@@ -53,19 +53,14 @@
                 <tr>
 
                     <th width="70">No</th>
-
+                    <th width="80">Bendera</th>
                     <th>Negara</th>
-
-                    <th>ISO3</th>
-
-                    <th>Region</th>
-
-                    <th>Capital</th>
-
-                    <th>Population</th>
-
+                    <th>Kode ISO3</th>
+                    <th>Wilayah</th>
+                    <th>Ibu Kota</th>
+                    <th>Jumlah Penduduk</th>
                     <th width="120">Aksi</th>
-
+                    
                 </tr>
 
                 </thead>
@@ -84,13 +79,21 @@
 
                         <td>
 
+                        <img src="{{ $country->flag_png }}"
+                            width="45"
+                            class="rounded border">
+
+                        </td>
+
+                        <td>
+
                             {{ $country->name }}
 
                         </td>
 
                         <td>
 
-                            <span class="badge bg-primary">
+                            <span class="badge bg-info">
 
                                 {{ $country->cca3 }}
 
@@ -112,7 +115,7 @@
 
                         <td>
 
-                            {{ number_format($country->population) }}
+                            {{ number_format($country->population,0,',','.') }}
 
                         </td>
 
@@ -138,7 +141,7 @@
                         <td colspan="7"
                             class="text-center">
 
-                            Belum ada data negara.
+                            Data negara tidak ditemukan.
 
                         </td>
 

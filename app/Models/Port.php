@@ -13,6 +13,8 @@ class Port extends Model
 
         'country_id',
 
+        'code',
+
         'name',
 
         'city',
@@ -22,6 +24,8 @@ class Port extends Model
         'longitude',
 
         'type',
+
+        'status',
 
         'risk_score',
 
