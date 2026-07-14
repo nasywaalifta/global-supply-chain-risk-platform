@@ -385,21 +385,21 @@
 
             <div class="card-body d-grid gap-2">
 
-                <button class="btn btn-info">
+                <a href="{{ route('countries.index') }}" class="btn btn-info">
                     🌍 Negara
-                </button>
+                </a>
 
-                <button class="btn btn-primary">
+                <a href="{{ route('ports.index') }}" class="btn btn-primary">
                     🚢 Pelabuhan
-                </button>
+                </a>
 
-                <button class="btn btn-warning">
+                <a href="{{ route('weather.index') }}" class="btn btn-warning">
                     ☁ Cuaca
-                </button>
+                </a>
 
-                <button class="btn btn-success">
+                <a href="{{ route('news.index') }}" class="btn btn-success">
                     📰 Berita
-                </button>
+                </a>
 
             </div>
 

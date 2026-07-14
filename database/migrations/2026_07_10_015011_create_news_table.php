@@ -21,11 +21,11 @@ return new class extends Migration
 
             $table->string('source')->nullable();
 
-            $table->string('author')->nullable();
+            $table->text('author')->nullable();
 
             $table->string('url')->unique();
 
-            $table->string('image_url')->nullable();
+            $table->text('image_url')->nullable();
 
             $table->string('country')->nullable();
 

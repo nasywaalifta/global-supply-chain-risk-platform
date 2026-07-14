@@ -82,7 +82,9 @@ class FetchNews extends Command
 
                     'source' => $article['source']['name'] ?? null,
 
-                    'author' => $article['author'] ?? null,
+                    'author' => isset($article['author'])
+                        ? substr($article['author'], 0, 255)
+                        : null,
 
                     'image_url' => $article['urlToImage'] ?? null,
 

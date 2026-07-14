@@ -13,24 +13,23 @@ class NewsService
             $response = Http::timeout(20)
                 ->retry(3, 1000)
                 ->acceptJson()
-                ->get(
-                    'https://newsapi.org/v2/everything',
-                    [
-                        'q' => '"supply chain" OR logistics OR shipping OR maritime OR seaport OR cargo OR container OR freight',
-                        'searchIn' => 'title,description',
-                        'language' => 'en',
-                        'sortBy' => 'publishedAt',
-                        'pageSize' => 20,
-                        'apiKey' => env('NEWS_API_KEY'),
-                    ]
-                );
+                ->get('https://newsapi.org/v2/everything', [
+
+                    'q' => '"supply chain" OR shipping OR maritime OR port OR cargo OR logistics OR freight OR "container ship" OR "port authority" OR "trade route"',
+
+                    'language' => 'en',
+
+                    'sortBy' => 'publishedAt',
+
+                    'pageSize' => 100,
+
+                    'apiKey' => env('NEWS_API_KEY'),
+
+                ]);
 
             if (! $response->successful()) {
 
-                logger()->error('News API Error', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
+                logger()->error($response->body());
 
                 return [];
 
@@ -38,42 +37,123 @@ class NewsService
 
             $articles = $response->json()['articles'] ?? [];
 
-            // Filter agar hanya berita yang benar-benar relevan
             $keywords = [
+
+                'port',
                 'shipping',
                 'ship',
-                'port',
-                'seaport',
-                'logistics',
-                'supply chain',
-                'cargo',
                 'container',
+                'cargo',
+                'logistics',
                 'freight',
                 'maritime',
+                'harbor',
+                'terminal',
+                'trade',
                 'export',
                 'import',
-                'trade',
-                'harbor',
+                'canal',
+                'strait',
+                'vessel',
+                'supply chain',
+
+            ];
+
+            $blacklist = [
+
+                'amazon',
+                'discount',
+                'coupon',
+                'sale',
+                'adidas',
+                'nike',
+                'shoe',
+                'fashion',
+                'lego',
+                'toy',
+                'music box',
+
+                'python',
+                'pypi',
+                'pip',
+                'npm',
+                'github',
+                'laravel',
+                'react',
+                'vue',
+                'node',
+                'package',
+                'library',
+                'framework',
+                'codec',
+                'kanonak',
+                'pipguard',
+                'cli',
+                'agentsentinel',
+
+                'archive of our own',
+                'fanfiction',
+                'ao3',
+                'slickdeals',
+                'dealnews',
+
             ];
 
             $filtered = [];
 
             foreach ($articles as $article) {
 
-                $text = strtolower(
-                    ($article['title'] ?? '') . ' ' .
-                    ($article['description'] ?? '')
-                );
+                $title = strtolower($article['title'] ?? '');
+                $description = strtolower($article['description'] ?? '');
+
+                $text = $title . ' ' . $description;
+
+                $matchCount = 0;
 
                 foreach ($keywords as $keyword) {
 
                     if (str_contains($text, strtolower($keyword))) {
 
-                        $filtered[] = $article;
+                        $matchCount++;
+
+                    }
+
+                }
+
+                $valid = $matchCount >= 1;
+
+                foreach ($blacklist as $bad) {
+
+                    if (str_contains($text, strtolower($bad))) {
+
+                        $valid = false;
 
                         break;
+
                     }
+
                 }
+
+                if (
+                    $valid &&
+                    strlen($title) > 20 &&
+                    !empty($description)
+                ) {
+
+                    $source = strtolower($article['source']['name'] ?? '');
+
+                    if (
+                        str_contains($source, 'archive') ||
+                        str_contains($source, 'slickdeals') ||
+                        str_contains($source, 'dealnews')
+                    ) {
+                        continue;
+                    }
+
+                    $filtered[] = $article;
+
+                }
+
             }
 
             return $filtered;

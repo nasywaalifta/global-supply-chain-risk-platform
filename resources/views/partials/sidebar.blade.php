@@ -109,16 +109,18 @@
         <ul class="nav flex-column mt-2">
 
             <li class="nav-item">
-                <a class="nav-link py-3 px-4 text-white" href="#">
+                <a class="nav-link py-3 px-4 {{ request()->routeIs('news.index') ? 'active bg-info text-white rounded' : 'text-white' }}"
+                href="{{ route('news.index') }}">
                     <i class="fas fa-newspaper me-2 text-info"></i>
                     Berita Global
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link py-3 px-4 text-white" href="#">
-                    <i class="fas fa-file-alt me-2 text-primary"></i>
-                    Artikel Analisis
+                <a class="nav-link py-3 px-4 text-white"
+                    href="#">
+                <i class="fas fa-file-alt me-2 text-primary"></i>
+                Artikel Analisis
                 </a>
             </li>
 
