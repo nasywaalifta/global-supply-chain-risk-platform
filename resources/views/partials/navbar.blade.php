@@ -1,54 +1,63 @@
-<nav class="navbar navbar-dark bg-black border-bottom border-secondary shadow-sm">
-
-    <div class="container-fluid">
-
-        <!-- Judul -->
-        <span class="navbar-brand fw-bold">
-            🌍 Global Supply Chain Risk Intelligence Platform
-        </span>
-
-        <div class="d-flex align-items-center text-white">
-
-            <!-- Jam -->
-            <span id="clock" class="me-4 text-info fw-semibold"></span>
-
-            <!-- Status -->
-            <span class="me-4">
-                <i class="fas fa-circle text-success"></i>
-                Sistem Aktif
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom px-4">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        
+        <!-- Left Side: Breadcrumb or Title -->
+        <div>
+            <span class="fw-semibold text-secondary" style="font-size: 0.95rem; font-family: var(--font-heading);">
+                @yield('breadcrumb', 'SupplyRisk Platform')
             </span>
+        </div>
 
-            <!-- Pengguna -->
-            <span class="me-3">
-                <i class="fas fa-user-circle text-info"></i>
-                {{ Auth::user()->name }}
-            </span>
+        <!-- Right Side: Clock and Online Indicator -->
+        <div class="d-flex align-items-center gap-3">
+            
+            <!-- Clock -->
+            <div class="rounded-pill px-3 py-1.5 border text-secondary fw-semibold d-flex align-items-center shadow-sm" 
+                 style="font-size: 0.85rem; background-color: rgba(255, 255, 255, 0.7); border-color: rgba(226, 232, 240, 0.8) !important; color: var(--text-secondary) !important;">
+                <i class="far fa-clock me-2" style="color: var(--primary-color) !important;"></i>
+                <span id="nav-clock" style="font-family: monospace; font-size: 0.9rem; letter-spacing: 0.5px;">-</span>
+            </div>
 
-            <!-- Tombol Keluar -->
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-
-                <button type="submit" class="btn btn-danger btn-sm">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Keluar
-                </button>
-            </form>
+            <!-- Online Status -->
+            <div class="rounded-pill px-3 py-1.5 border text-success fw-semibold d-flex align-items-center shadow-sm" 
+                 style="font-size: 0.85rem; background-color: rgba(255, 255, 255, 0.7); border-color: rgba(226, 232, 240, 0.8) !important;">
+                <span class="d-inline-block rounded-circle bg-success me-2" style="width: 8px; height: 8px; animation: pulse 2s infinite;"></span>
+                Online
+            </div>
 
         </div>
 
     </div>
-
 </nav>
 
+<style>
+    @keyframes pulse {
+        0% {
+            transform: scale(0.9);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        }
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+        }
+        100% {
+            transform: scale(0.9);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        }
+    }
+</style>
+
 <script>
-setInterval(function () {
-
-    const now = new Date();
-
-    document.getElementById('clock').innerHTML =
-        now.toLocaleDateString('id-ID') +
-        ' | ' +
-        now.toLocaleTimeString('id-ID');
-
-}, 1000);
+    function updateClock() {
+        const now = new Date();
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        const el = document.getElementById('nav-clock');
+        if (el) {
+            el.textContent = `${hrs}:${mins}:${secs}`;
+        }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
 </script>

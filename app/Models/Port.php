@@ -23,6 +23,10 @@ class Port extends Model
 
         'longitude',
 
+        'congestion_score',
+
+        'congestion_level',
+
         'type',
 
         'status',

@@ -8,12 +8,12 @@ class ExchangeRateService
 {
     public function getLatestRates()
     {
-        $response = Http::get('https://api.frankfurter.app/latest?from=USD');
+        $response = Http::get('https://open.er-api.com/v6/latest/USD');
 
         if (!$response->successful()) {
             return [];
         }
 
-        return $response->json();
+        return $response->json()['rates'] ?? [];
     }
 }

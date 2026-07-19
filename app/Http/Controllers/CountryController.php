@@ -12,7 +12,7 @@ class CountryController extends Controller
     {
         $search = $request->search;
 
-        $countries = Country::query()
+        $countries = Country::with(['riskScore', 'weather', 'ports'])
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
                       ->orWhere('cca3', 'like', "%{$search}%")

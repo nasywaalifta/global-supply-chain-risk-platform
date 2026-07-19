@@ -10,45 +10,27 @@ class Country extends Model
     use HasFactory;
 
     protected $fillable = [
-
         'name',
-
         'official_name',
-
         'cca2',
-
         'cca3',
-
         'capital',
-
         'region',
-
         'subregion',
-
         'population',
-
+        'gdp',
+        'inflation',
         'area',
-
         'currency_code',
-
         'currency_name',
-
         'currency_symbol',
-
         'language',
-
         'flag_png',
-
         'flag_svg',
-
         'latitude',
-
         'longitude',
-
         'timezones',
-
         'google_maps'
-
     ];
 
     /**
@@ -81,5 +63,13 @@ class Country extends Model
     public function watchlists()
     {
         return $this->hasMany(Watchlist::class);
+    }
+
+    /**
+     * Relasi ke tabel weather_data
+     */
+    public function weather()
+    {
+        return $this->hasOne(WeatherData::class);
     }
 }

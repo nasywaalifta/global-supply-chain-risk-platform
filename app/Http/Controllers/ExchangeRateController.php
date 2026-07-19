@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExchangeRate;
+use App\Models\Country;
 
 class ExchangeRateController extends Controller
 {
@@ -10,6 +11,11 @@ class ExchangeRateController extends Controller
     {
         $exchangeRates = ExchangeRate::orderBy('code')->get();
 
-        return view('exchange_rates.index', compact('exchangeRates'));
+        $countries = Country::all()->keyBy('currency_code');
+
+        return view('exchange_rates.index', [
+            'exchangeRates' => $exchangeRates,
+            'countries'     => $countries,
+        ]);
     }
 }

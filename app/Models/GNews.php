@@ -5,37 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class News extends Model
+class GNews extends Model
 {
     use HasFactory;
 
     protected $table = 'news';
 
     protected $fillable = [
-
         'title',
-
         'description',
-
         'source',
-
         'author',
-
         'url',
-
         'image_url',
-
         'country',
-
         'sentiment',
-
         'published_at',
-
     ];
 
     protected $casts = [
-
         'published_at' => 'datetime',
-
     ];
 }
