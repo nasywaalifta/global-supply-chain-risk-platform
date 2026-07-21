@@ -426,7 +426,9 @@ async function loadCountry(country) {
 
     let currencyCode = result.country.currency_code;
 
-    let exchange = result.exchange[currencyCode];
+    let exchange = result.exchange.rates
+        ? result.exchange.rates[currencyCode]
+        : null;
 
     exchangeChart.data.labels = [currencyCode];
     exchangeChart.data.datasets[0].data = [exchange ?? 0];

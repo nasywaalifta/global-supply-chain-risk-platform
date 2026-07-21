@@ -16,6 +16,7 @@ use App\Http\Controllers\CountryWeatherController;
 use App\Http\Controllers\VisualizationController;
 use App\Http\Controllers\RiskScoreController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/weather', [CountryWeatherController::class, 'index'])
+    Route::get('/weather', [WeatherController::class, 'index'])
     ->name('weather.index');
 
     /*
@@ -94,6 +95,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/exchange-rates', [ExchangeRateController::class, 'index'])
         ->name('exchange-rates.index');
+
+    Route::post('/exchange-rates/sync', [ExchangeRateController::class, 'sync'])
+    ->name('exchange-rates.sync');
     
     Route::get('/risk-score', [RiskScoreController::class, 'index'])
     ->name('risk-score.index');
@@ -168,6 +172,24 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
+
+    Route::middleware(['admin'])->prefix('admin')->group(function () {
+
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('admin.dashboard');
+        
+        Route::resource('users', \App\Http\Controllers\Admin\UserManagementController::class)
+            ->names('admin.users');
+
+        Route::post('ports/sync', [\App\Http\Controllers\Admin\PortManagementController::class, 'sync'])
+            ->name('admin.ports.sync');
+        Route::resource('ports', \App\Http\Controllers\Admin\PortManagementController::class)
+            ->names('admin.ports');
+
+        Route::resource('articles', \App\Http\Controllers\Admin\ArticleManagementController::class)
+            ->names('admin.articles');
+
+    });
 });
 
 /*

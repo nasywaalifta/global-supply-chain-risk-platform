@@ -14,6 +14,8 @@ class Weather extends Model
         'temperature',
         'humidity',
         'wind_speed',
+        'precipitation',
+        'storm_risk',
         'condition',
         'weather_risk',
         'last_update',

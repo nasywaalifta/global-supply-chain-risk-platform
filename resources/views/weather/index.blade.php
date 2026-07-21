@@ -7,23 +7,19 @@
 <div class="container-fluid">
 
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1" style="color: var(--text-main);">
-                🌦 Monitoring Cuaca Global
-            </h2>
-            <small class="text-muted">
-                Data Cuaca Real-Time dari Open-Meteo API
-            </small>
-        </div>
-        <div class="text-end">
-            <small class="text-muted">Update :</small>
-            <br>
-            <strong>{{ now()->format('d M Y H:i') }}</strong>
-        </div>
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1" style="color: var(--text-main);">
+            🌦 Monitoring Cuaca Global
+        </h2>
 
-    <!-- Card Statistik -->
+        <small class="text-muted">
+            Data Cuaca Global dari Open-Meteo API
+        </small>
+    </div>
+</div>
+
+<!-- Card Statistik -->
     <div class="row g-3 mb-4">
 
         <div class="col-md-3">
@@ -87,40 +83,61 @@
     <!-- Filter Form -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body p-3">
-            <form method="GET" action="{{ route('weather.index') }}" class="mb-0">
-                <div class="row g-2">
-                    <div class="col-md-5">
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            class="form-control"
-                            placeholder="🔍 Cari negara..."
-                            style="height:48px;">
+            <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+
+        <label class="form-label fw-semibold">
+            <i class="fas fa-globe me-2 text-primary"></i>
+            Pilih Negara
+        </label>
+
+        <select id="countrySelect" class="form-select">
+            <option value="">-- Pilih Negara --</option>
+
+            @foreach($mapWeather as $country)
+                <option
+                    value="{{ $country->name }}"
+                    data-lat="{{ $country->latitude }}"
+                    data-lng="{{ $country->longitude }}">
+                    {{ $country->name }}
+                </option>
+            @endforeach
+
+        </select>
+
+    </div>
+</div>
+
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body py-2">
+
+                            <strong>Legenda :</strong>
+
+                            <span class="badge bg-success ms-3">🟢 Rendah</span>
+                            <span class="badge bg-warning text-dark ms-2">🟡 Sedang</span>
+                            <span class="badge bg-danger ms-2">🔴 Tinggi</span>
+
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <select
-                            name="risk"
-                            class="form-select"
-                            style="height:48px;">
-                            <option value="">Semua Risiko Badai</option>
-                            <option value="Rendah" {{ request('risk')=='Rendah'?'selected':'' }}>Rendah</option>
-                            <option value="Sedang" {{ request('risk')=='Sedang'?'selected':'' }}>Sedang</option>
-                            <option value="Tinggi" {{ request('risk')=='Tinggi'?'selected':'' }}>Tinggi</option>
-                        </select>
+                    <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="fas fa-earth-asia me-2 text-primary"></i>
+                                Peta Monitoring Cuaca
+                            </h5>
+                            <span class="badge bg-primary">
+                                {{ $mapWeather->count() }} Negara
+                            </span>
+                        </div>
                     </div>
-                    <div class="col-md-2 d-grid">
-                        <button class="btn btn-primary" style="height:48px;">
-                            <i class="fas fa-search me-1"></i> Cari
-                        </button>
+
+                    <div class="card-body p-0">
+                        <div id="weatherMap" style="height:600px; border-radius:12px;"></div>
                     </div>
-                    <div class="col-md-2 d-grid">
-                        <a href="{{ route('weather.index') }}" class="btn btn-secondary d-flex align-items-center justify-content-center" style="height:48px;">
-                            Reset
-                        </a>
-                    </div>
+
+                    </div>               
                 </div>
-            </form>
         </div>
     </div>
 
@@ -148,7 +165,7 @@
                 @forelse($weather as $item)
                     <tr>
                         <td>
-                            <strong>{{ $item->country->name }}</strong>
+                            <strong>{{ $item->port->country->name }}</strong>
                         </td>
                         <td>
                             {{ $item->temperature }} °C
@@ -192,4 +209,118 @@
     </div>
 
 </div>
+@push('styles')
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+@endpush
+@push('scripts')
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+var map = L.map('weatherMap').setView([20, 0], 2);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+// Simpan semua marker
+let markers = {};
+
+// Icon marker
+const greenIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const yellowIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const redIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+@foreach($mapWeather as $country)
+
+    @php
+        $port = $country->ports->first();
+        $weather = $port?->weather;
+
+        $icon = 'greenIcon';
+
+        if ($weather) {
+            if ($weather->storm_risk == 'Sedang') {
+                $icon = 'yellowIcon';
+            }
+
+            if ($weather->storm_risk == 'Tinggi') {
+                $icon = 'redIcon';
+            }
+        }
+    @endphp
+
+    @if($weather && $country->latitude && $country->longitude)
+
+        var marker = L.marker(
+            [
+                {{ $country->latitude }},
+                {{ $country->longitude }}
+            ],
+            {
+                icon: {{ $icon }}
+            }
+        ).addTo(map);
+
+        markers["{{ $country->name }}"] = marker;
+
+        marker.bindPopup(`
+<div style="min-width:240px">
+<h6 class="fw-bold mb-2">🌍 {{ $country->name }}</h6>
+<table class="table table-sm mb-0">
+<tr><td>🌡️ Suhu</td><td><b>{{ $weather->temperature }} °C</b></td></tr>
+<tr><td>🌧️ Hujan</td><td><b>{{ $weather->precipitation }} mm</b></td></tr>
+<tr><td>💨 Angin</td><td><b>{{ $weather->wind_speed }} km/h</b></td></tr>
+<tr><td>🌪️ Risiko</td><td><b>{{ $weather->storm_risk }}</b></td></tr>
+</table>
+</div>
+`);
+
+    @endif
+
+@endforeach
+
+document.getElementById('countrySelect').addEventListener('change', function () {
+
+    let option = this.options[this.selectedIndex];
+
+    if (!option.value) return;
+
+    let lat = parseFloat(option.dataset.lat);
+    let lng = parseFloat(option.dataset.lng);
+
+    map.flyTo([lat, lng], 5, {
+        duration: 1.5
+    });
+
+    if (markers[option.value]) {
+        markers[option.value].openPopup();
+    }
+
+});
+</script>
+@endpush
 @endsection

@@ -77,7 +77,7 @@ class VisualizationController extends Controller
 
             $inflation,
 
-            $exchange['IDR'] ?? 0,
+            $exchange['rates']['IDR'] ?? 0,
 
             $negativeNews
 

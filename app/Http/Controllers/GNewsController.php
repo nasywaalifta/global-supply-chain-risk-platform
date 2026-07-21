@@ -30,20 +30,18 @@ class GNewsController extends Controller
 
         $total = $news->count();
 
-        $logistics = $news->where('sentiment', 'Positive')->count();
-
-        $economy = $news->where('sentiment', 'Neutral')->count();
-
-        $geopolitics = $news->where('sentiment', 'Negative')->count();
+        $positive = $news->where('sentiment', 'Positive')->count();
+        $neutral = $news->where('sentiment', 'Neutral')->count();
+        $negative = $news->where('sentiment', 'Negative')->count();
 
         return view('gnews.index', compact(
             'news',
             'countries',
             'country',
             'total',
-            'logistics',
-            'economy',
-            'geopolitics'
+            'positive',
+            'neutral',
+            'negative'
         ));
     }
 }

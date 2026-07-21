@@ -14,6 +14,6 @@ class ExchangeRateService
             return [];
         }
 
-        return $response->json()['rates'] ?? [];
+        return $response->json();
     }
 }

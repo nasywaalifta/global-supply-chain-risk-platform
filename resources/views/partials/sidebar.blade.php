@@ -142,6 +142,50 @@
 
     </div>
 
+    @if(auth()->user()->role === 'admin')
+
+    <div class="sidebar-section-title">
+        ADMIN
+    </div>
+
+    <ul class="nav flex-column mb-4">
+
+        <li class="nav-item">
+            <a class="nav-link nav-link-custom {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+               href="{{ route('admin.dashboard') }}">
+                <i class="fas fa-user-shield"></i>
+                <span>Dashboard Admin</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link nav-link-custom {{ request()->routeIs('admin.users.*') ? 'active' : '' }}"
+               href="{{ route('admin.users.index') }}">
+                <i class="fas fa-users"></i>
+                <span>User Management</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link nav-link-custom {{ request()->routeIs('admin.ports.*') ? 'active' : '' }}"
+               href="{{ route('admin.ports.index') }}">
+                <i class="fas fa-anchor"></i>
+                <span>Port Management</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link nav-link-custom {{ request()->routeIs('admin.articles.*') ? 'active' : '' }}"
+               href="{{ route('admin.articles.index') }}">
+                <i class="fas fa-newspaper"></i>
+                <span>Article Management</span>
+            </a>
+        </li>
+
+    </ul>
+
+@endif
+
     <!-- Footer -->
     <div class="p-3 border-top mt-auto" style="border-color: rgba(255, 255, 255, 0.05) !important; background-color: rgba(0, 0, 0, 0.2) !important;">
         <div class="d-flex align-items-center justify-content-between">
@@ -152,7 +196,9 @@
                 </div>
                 <div>
                     <h6 class="mb-0 text-white fw-bold" style="font-size: 0.85rem; font-family: var(--font-heading);">{{ Auth::user()->name }}</h6>
-                    <small class="text-muted" style="font-size: 0.7rem;">Analyst User</small>
+                    <small class="text-muted" style="font-size: 0.7rem;">
+                        {{ ucfirst(Auth::user()->role) }}
+                    </small>
                 </div>
             </div>
             

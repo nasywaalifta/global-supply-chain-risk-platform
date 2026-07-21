@@ -2,6 +2,15 @@
 
 @section('content')
 
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        {{ session('success') }}
+
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
 <div class="container-fluid">
 
     <!-- Header -->
@@ -15,7 +24,7 @@
             </h2>
 
             <p class="text-muted mb-0">
-                Monitoring nilai tukar mata uang dunia secara real-time.
+                Monitoring nilai tukar mata uang dunia.
             </p>
 
         </div>
@@ -255,36 +264,15 @@
 
                     <hr>
 
-                    <div class="d-flex justify-content-between">
+                    <div class="mt-3">
+                        <form action="{{ route('exchange-rates.sync') }}" method="POST">
+                            @csrf
 
-                        <span class="text-muted">
-
-                            Status
-
-                        </span>
-
-                        <span class="badge bg-success">
-
-                            Real-Time
-
-                        </span>
-
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-2">
-
-                        <span class="text-muted">
-
-                            Update Terakhir
-
-                        </span>
-
-                        <strong>
-
-                            {{ optional($exchangeRates->first()?->updated_at_api)->format('d M Y H:i') }}
-
-                        </strong>
-
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-rotate me-2"></i>
+                                Sinkronisasi Data
+                            </button>
+                        </form>
                     </div>
 
                 </div>

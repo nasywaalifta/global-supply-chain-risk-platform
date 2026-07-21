@@ -32,8 +32,6 @@
 
                     </option>
 
-                    </option>
-
                 @endforeach
 
             </select>
@@ -58,8 +56,8 @@
     <div class="col-md-3">
         <div class="card border-0 shadow-sm">
             <div class="card-body text-center">
-                <h6 class="text-muted">📦 Logistics</h6>
-                <h3 class="fw-bold text-success">{{ $logistics }}</h3>
+                <h6 class="text-muted">🟢 Positive</h6>
+                <h3 class="fw-bold text-success">{{ $positive }}</h3>
             </div>
         </div>
     </div>
@@ -67,8 +65,8 @@
     <div class="col-md-3">
         <div class="card border-0 shadow-sm">
             <div class="card-body text-center">
-                <h6 class="text-muted">💹 Economy</h6>
-                <h3 class="fw-bold text-warning">{{ $economy }}</h3>
+                <h6 class="text-muted">🟡 Neutral</h6>
+                <h3 class="fw-bold text-warning">{{ $neutral }}</h3>
             </div>
         </div>
     </div>
@@ -76,8 +74,8 @@
     <div class="col-md-3">
         <div class="card border-0 shadow-sm">
             <div class="card-body text-center">
-                <h6 class="text-muted">🌍 Geopolitics</h6>
-                <h3 class="fw-bold text-danger">{{ $geopolitics }}</h3>
+                <h6 class="text-muted">🔴 Negative</h6>
+                <h3 class="fw-bold text-danger">{{ $negative }}</h3>
             </div>
         </div>
     </div>
@@ -100,39 +98,53 @@
 
                     <div class="card bg-secondary h-100">
 
-                        @if(!empty($item['image']))
-                            <img src="{{ $item['image'] }}"
+                        @if($item->image_url)
+                            <img src="{{ $item->image_url }}"
                                 class="card-img-top"
                                 style="height:200px;object-fit:cover;">
-                        @endif
+                            @endif
 
                         <div class="card-body">
 
                             <h5 class="card-title">
 
-                                {{ $item['title'] }}
+                                {{ $item->title }}
 
                             </h5>
 
-                            @if($item['category'] == 'Logistics')
-                                <span class="badge bg-success mb-2">📦 Logistics</span>
-                            @elseif($item['category'] == 'Economy')
-                                <span class="badge bg-warning text-dark mb-2">💹 Economy</span>
-                            @elseif($item['category'] == 'Geopolitics')
-                                <span class="badge bg-danger mb-2">🌍 Geopolitics</span>
+                            @if($item->sentiment == 'Positive')
+
+                                <span class="badge bg-success mb-2">
+                                    🟢 Positive
+                                </span>
+
+                            @elseif($item->sentiment == 'Negative')
+
+                                <span class="badge bg-danger mb-2">
+                                    🔴 Negative
+                                </span>
+
                             @else
-                                <span class="badge bg-secondary mb-2">General</span>
+
+                                <span class="badge bg-warning text-dark mb-2">
+                                    🟡 Neutral
+                                </span>
+
                             @endif
+
+                            <small class="text-info d-block mb-2">
+                                AI Sentiment Analysis
+                            </small>
 
                             <p class="small text-light">
 
-                                {{ \Illuminate\Support\Str::limit($item['description'] ?? '',120) }}
+                                {{ \Illuminate\Support\Str::limit($item->description ?? '',120) }}
 
                             </p>
 
                             <span class="badge bg-info">
 
-                                {{ $item['source']['name'] ?? '-' }}
+                                {{ $item->source ?? '-' }}
 
                             </span>
 
@@ -141,7 +153,7 @@
 
                             <small>
 
-                                {{ \Carbon\Carbon::parse($item['publishedAt'])->format('d M Y H:i') }}
+                                {{ optional($item->published_at)->format('d M Y H:i') }}
 
                             </small>
 
@@ -149,7 +161,7 @@
 
                         <div class="card-footer bg-transparent border-0">
 
-                            <a href="{{ $item['url'] }}"
+                            <a href="{{ $item->url }}"
                                target="_blank"
                                class="btn btn-primary w-100">
 

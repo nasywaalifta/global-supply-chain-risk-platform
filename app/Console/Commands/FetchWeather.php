@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Port;
 use App\Models\Weather;
-use App\Services\WeatherService;
+use App\Services\OpenMeteoService;
 
 class FetchWeather extends Command
 {
@@ -26,7 +26,7 @@ class FetchWeather extends Command
     /**
      * Execute the console command.
      */
-    public function handle(WeatherService $weatherService)
+    public function handle(OpenMeteoService $weatherService)
     {
         $this->info('Mengambil data cuaca...');
 
@@ -38,7 +38,7 @@ class FetchWeather extends Command
                 continue;
             }
 
-            $weather = $weatherService->getWeather(
+            $weather = $weatherService->getCurrentWeather(
                 $port->latitude,
                 $port->longitude
             );
@@ -50,49 +50,11 @@ class FetchWeather extends Command
                 continue;
             }
 
-            $risk = 0;
-
-            // Risiko berdasarkan angin
-            if (($weather['wind_speed_10m'] ?? 0) >= 50) {
-
-                $risk += 60;
-
-            } elseif (($weather['wind_speed_10m'] ?? 0) >= 30) {
-
-                $risk += 30;
-
-            }
-
-            // Risiko berdasarkan suhu
-            if (($weather['temperature_2m'] ?? 0) >= 38) {
-
-                $risk += 20;
-
-            }
-
-            // Risiko berdasarkan kondisi cuaca
-            $condition = $weather['condition'] ?? '';
-
-            if (
-                str_contains($condition, 'Thunderstorm') ||
-                str_contains($condition, 'Heavy Rain') ||
-                str_contains($condition, 'Violent')
-            ) {
-
-                $risk += 40;
-
-            } elseif (
-                str_contains($condition, 'Rain') ||
-                str_contains($condition, 'Snow')
-            ) {
-
-                $risk += 20;
-
-            }
-
-            if ($risk > 100) {
-                $risk = 100;
-            }
+            $risk = match ($weather['storm_risk']) {
+                'Tinggi' => 100,
+                'Sedang' => 60,
+                default => 20,
+            };
 
             Weather::updateOrCreate(
 
@@ -101,19 +63,21 @@ class FetchWeather extends Command
                 ],
 
                 [
+                    'temperature' => $weather['temperature'] ?? null,
 
-                    'temperature' => $weather['temperature_2m'] ?? null,
+                    'humidity' => null,
 
-                    'humidity' => $weather['relative_humidity_2m'] ?? null,
+                    'wind_speed' => $weather['wind_speed'] ?? null,
 
-                    'wind_speed' => $weather['wind_speed_10m'] ?? null,
+                    'precipitation' => $weather['precipitation'] ?? null,
 
-                    'condition' => $weather['condition'] ?? null,
+                    'storm_risk' => $weather['storm_risk'] ?? null,
+
+                    'condition' => $weather['weather_code'] ?? null,
 
                     'weather_risk' => $risk,
 
                     'last_update' => now(),
-
                 ]
 
             );

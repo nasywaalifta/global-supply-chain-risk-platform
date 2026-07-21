@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use App\Models\GNews;
 use App\Services\GNewsService;
 use App\Models\Country;
+use App\Models\PositiveWord;
+use App\Models\NegativeWord;
 
 class FetchNews extends Command
 {
@@ -54,6 +56,27 @@ class FetchNews extends Command
                 ($article['description'] ?? '')
             );
 
+            $positiveWords = PositiveWord::pluck('word')->toArray();
+            $negativeWords = NegativeWord::pluck('word')->toArray();
+
+            $positiveScore = 0;
+            $negativeScore = 0;
+
+            $words = preg_split('/\s+/', $text);
+
+            foreach ($words as $word) {
+
+                $word = preg_replace('/[^a-z]/', '', $word);
+
+                if (in_array($word, $positiveWords)) {
+                    $positiveScore++;
+                }
+
+                if (in_array($word, $negativeWords)) {
+                    $negativeScore++;
+                }
+            }
+
             $detectedCountry = null;
 
             foreach ($countries as $countryName) {
@@ -68,31 +91,17 @@ class FetchNews extends Command
 
             }
 
-            $sentiment = 'Neutral';
+            if ($positiveScore > $negativeScore) {
 
-            if (
-                str_contains($text, 'war') ||
-                str_contains($text, 'attack') ||
-                str_contains($text, 'storm') ||
-                str_contains($text, 'earthquake') ||
-                str_contains($text, 'crisis') ||
-                str_contains($text, 'delay') ||
-                str_contains($text, 'conflict')
-            ) {
+                $sentiment = 'Positive';
+
+            } elseif ($negativeScore > $positiveScore) {
 
                 $sentiment = 'Negative';
 
-            } elseif (
+            } else {
 
-                str_contains($text, 'growth') ||
-                str_contains($text, 'recovery') ||
-                str_contains($text, 'improve') ||
-                str_contains($text, 'expansion') ||
-                str_contains($text, 'increase')
-
-            ) {
-
-                $sentiment = 'Positive';
+                $sentiment = 'Neutral';
 
             }
 
