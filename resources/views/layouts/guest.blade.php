@@ -1,30 +1,88 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>SupplyRisk Login</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
+    <style>
+        body{
+            margin:0;
+            font-family:Arial,Helvetica,sans-serif;
+            background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+        }
+
+        .login-wrapper{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+        }
+
+        .login-card{
+            width:100%;
+            max-width:450px;
+            background:#fff;
+            border-radius:18px;
+            padding:35px;
+            box-shadow:0 15px 35px rgba(0,0,0,.2);
+        }
+
+        .logo{
+            text-align:center;
+            margin-bottom:25px;
+        }
+
+        .logo h2{
+            margin:0;
+            color:#1e40af;
+            font-weight:bold;
+        }
+
+        .logo p{
+            margin-top:8px;
+            color:#666;
+            font-size:14px;
+        }
+
+        footer{
+            text-align:center;
+            color:white;
+            margin-top:20px;
+            font-size:13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+    <div>
+
+        <div class="login-card">
+
+            <div class="logo">
+                <h2>🌍 SupplyRisk</h2>
+                <p>Global Supply Chain Risk Intelligence Platform</p>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
+            {{ $slot }}
+
         </div>
-    </body>
+
+        <footer>
+            © 2026 SupplyRisk
+        </footer>
+
+    </div>
+
+</div>
+
+</body>
 </html>
