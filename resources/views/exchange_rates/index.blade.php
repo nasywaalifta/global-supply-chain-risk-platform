@@ -342,12 +342,6 @@
 
             </h5>
 
-            <span class="badge" style="background-color: rgba(16, 185, 129, 0.1) !important; color: #047857 !important; border: 1px solid rgba(16, 185, 129, 0.2) !important;">
-
-                Real-Time
-
-            </span>
-
         </div>
 
     </div>
